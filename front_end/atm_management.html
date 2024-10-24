@@ -34,6 +34,8 @@
 <body>
     <h2>ATM Management Application</h2>
 
+    <button onclick="logout()">Logout</button> <!-- Nút đăng xuất -->
+
     <div class="section">
         <h3>Check Balance</h3>
         <label for="balanceCustomerId">Customer ID:</label>
@@ -122,6 +124,12 @@
             });
             const result = await response.json();
             document.getElementById('transferResult').textContent = response.ok ? `Transfer Successful. Sender New Balance: ${result.senderNewBalance}, Receiver New Balance: ${result.receiverNewBalance}` : result;
+        }
+
+        // Hàm đăng xuất
+        function logout() {
+            localStorage.removeItem('jwt'); // Xóa token
+            window.location.href = 'login.html'; // Chuyển hướng về trang đăng nhập
         }
     </script>
 </body>

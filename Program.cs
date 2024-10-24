@@ -1,8 +1,30 @@
 using Microsoft.EntityFrameworkCore;
 using ATMManagementApplication.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    var jwtSection = builder.Configuration.GetSection("Jwt");
+    var key = jwtSection.GetValue<string>("Key");
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSection.GetValue<string>("Issuer"),
+        ValidAudience = jwtSection.GetValue<string>("Audience"),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+    };
+});
 // Add CORS policy
 builder.Services.AddCors(options =>
 {

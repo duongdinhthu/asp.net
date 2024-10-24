@@ -15,8 +15,6 @@ namespace ATMManagementApplication.Controllers
         {
             _context = context;
         }
-
-
         [HttpGet("balance/{customerId}")]
         public ActionResult GetBalance(int customerId)
         {

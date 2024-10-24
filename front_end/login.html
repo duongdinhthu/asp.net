@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWT Login</title>
+    <script>
+        const apiUrl = 'http://localhost:5175/api/auth'; // Đổi thành URL API của bạn
+
+        // Kiểm tra xem JWT có tồn tại trong localStorage không
+        window.onload = function() {
+            const token = localStorage.getItem('jwt');
+            const loginSection = document.getElementById('login-section');
+            const autoLoginSection = document.getElementById('auto-login-section');
+
+            if (token) {
+                // Nếu có token, hiển thị nút đăng nhập bằng token
+                loginSection.style.display = 'none';
+                autoLoginSection.style.display = 'block';
+            } else {
+                // Nếu không có token, hiển thị form đăng nhập
+                loginSection.style.display = 'block';
+                autoLoginSection.style.display = 'none';
+            }
+        };
+
+        // Hàm đăng nhập tự động bằng JWT có sẵn
+        async function autoLogin() {
+            const token = localStorage.getItem('jwt');
+            if (!token) {
+                alert('No token found, please log in.');
+                return;
+            }
+
+            // Thực hiện yêu cầu với JWT để kiểm tra tính hợp lệ
+            const response = await fetch(`${apiUrl}/verify-token`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                // Token hợp lệ, chuyển hướng tới trang ATM Management
+                window.location.href = 'atm_management.html';
+            } else {
+                alert('Token is invalid or expired, please log in again.');
+                localStorage.removeItem('jwt'); // Xoá token nếu không hợp lệ
+                location.reload(); // Reload để hiện lại form đăng nhập
+            }
+        }
+
+        // Hàm đăng nhập thông thường
+        async function login() {
+            const name = document.getElementById('loginName').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const response = await fetch(`${apiUrl}/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, password })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('jwt', data.token); // Lưu JWT vào localStorage
+                alert('Login successful! Redirecting...' + data.token);
+                window.location.href = 'atm_management.html'; // Chuyển sang trang ATM Management
+            } else {
+                alert('Login failed: ' + (await response.text()));
+            }
+        }
+
+        // Hàm đăng ký
+        async function register() {
+            const name = document.getElementById('registerName').value;
+            const password = document.getElementById('registerPassword').value;
+
+            const response = await fetch(`${apiUrl}/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, password })
+            });
+
+            if (response.ok) {
+                alert('Registration successful! You can now log in.');
+                showSection('login-section'); // Chuyển về form đăng nhập
+            } else {
+                alert('Registration failed: ' + (await response.text()));
+            }
+        }
+
+        // Hàm đổi mật khẩu
+        async function changePassword() {
+            const name = document.getElementById('changePasswordName').value;
+            const oldPassword = document.getElementById('oldPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+
+            const response = await fetch(`${apiUrl}/change-password`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, oldPassword, newPassword })
+            });
+
+            if (response.ok) {
+                alert('Password changed successfully!');
+                showSection('login-section'); // Chuyển về form đăng nhập
+            } else {
+                alert('Change password failed: ' + (await response.text()));
+            }
+        }
+
+        // Chuyển đổi giữa các form
+        function showSection(sectionId) {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('auto-login-section').style.display = 'none';
+            document.getElementById('register-section').style.display = 'none';
+            document.getElementById('change-password-section').style.display = 'none';
+            document.getElementById(sectionId).style.display = 'block';
+        }
+    </script>
+</head>
+<body>
+    <!-- Form đăng nhập -->
+    <div id="login-section" style="display: none;">
+        <h2>Login</h2>
+        <input type="text" id="loginName" placeholder="Username" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button onclick="login()">Login</button>
+        <p><a href="javascript:void(0)" onclick="showSection('register-section')">Register</a></p>
+        <p><a href="javascript:void(0)" onclick="showSection('change-password-section')">Change Password</a></p>
+    </div>
+
+    <!-- Nút Auto Login nếu đã có JWT -->
+    <div id="auto-login-section" style="display: none;">
+        <h2>You are already logged in</h2>
+        <button onclick="autoLogin()">Continue with saved token</button>
+    </div>
+
+    <!-- Form đăng ký -->
+    <div id="register-section" style="display: none;">
+        <h2>Register</h2>
+        <input type="text" id="registerName" placeholder="Username" required>
+        <input type="password" id="registerPassword" placeholder="Password" required>
+        <button onclick="register()">Register</button>
+        <p><a href="javascript:void(0)" onclick="showSection('login-section')">Back to Login</a></p>
+    </div>
+
+    <!-- Form đổi mật khẩu -->
+    <div id="change-password-section" style="display: none;">
+        <h2>Change Password</h2>
+        <input type="text" id="changePasswordName" placeholder="Username" required>
+        <input type="password" id="oldPassword" placeholder="Old Password" required>
+        <input type="password" id="newPassword" placeholder="New Password" required>
+        <button onclick="changePassword()">Change Password</button>
+        <p><a href="javascript:void(0)" onclick="showSection('login-section')">Back to Login</a></p>
+    </div>
+</body>
+</html>

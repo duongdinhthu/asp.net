@@ -144,3 +144,4 @@ D:\CSharp\ATMManagementApplication\obj\Debug\net8.0\refint\ATMManagementApplicat
 D:\CSharp\ATMManagementApplication\obj\Debug\net8.0\ATMManagementApplication.pdb
 D:\CSharp\ATMManagementApplication\obj\Debug\net8.0\ATMManagementApplication.genruntimeconfig.cache
 D:\CSharp\ATMManagementApplication\obj\Debug\net8.0\ref\ATMManagementApplication.dll
+D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
