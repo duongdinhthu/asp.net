@@ -23,7 +23,7 @@ namespace ATMManagementApplication.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] Customer login)
+        public IActionResult Login([FromBody] LoginRequest login)
         {
             var customer = _context.Customer.FirstOrDefault(c => c.Name == login.Name && c.Password == login.Password);
             if (customer == null)
@@ -72,46 +72,31 @@ namespace ATMManagementApplication.Controllers
 
         // Hàm đăng ký
         [HttpPost("register")]
-        public IActionResult Register([FromBody] Customer newCustomer)
+        public IActionResult Register([FromBody] RegisterRequest newCustomerRequest)
         {
-            var existingCustomer = _context.Customer.FirstOrDefault(c => c.Name == newCustomer.Name);
+            var existingCustomer = _context.Customer.FirstOrDefault(c => c.Name == newCustomerRequest.Name);
             if (existingCustomer != null)
             {
                 return Conflict("User already exists");
             }
+
+            // Tạo đối tượng Customer từ RegisterRequest
+            var newCustomer = new Customer
+            {
+                Name = newCustomerRequest.Name,
+                Password = newCustomerRequest.Password,
+                Balance = 0, // Giá trị mặc định hoặc có thể thay đổi sau
+                DailyLimit = 5000, // Giá trị mặc định hoặc lấy từ cơ sở dữ liệu
+                TransactionCountLimit = 10, // Giá trị mặc định hoặc lấy từ cơ sở dữ liệu
+                Email = "", // Nếu có trường Email trong RegisterRequest, có thể thêm vào đây
+            };
 
             _context.Customer.Add(newCustomer);
             _context.SaveChanges();
 
             return CreatedAtAction(nameof(Login), new { name = newCustomer.Name }, newCustomer);
         }
-        [HttpPost("verify-token")]
-        public IActionResult VerifyToken()
-        {
-            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_configuration.GetValue<string>("Jwt:Key"));
 
-            try
-            {
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidIssuer = _configuration.GetValue<string>("Jwt:Issuer"),
-                    ValidAudience = _configuration.GetValue<string>("Jwt:Audience"),
-                    ClockSkew = TimeSpan.Zero // Không cho phép khoảng trễ thời gian
-                }, out SecurityToken validatedToken);
-
-                return Ok("Token is valid");
-            }
-            catch
-            {
-                return Unauthorized("Invalid or expired token");
-            }
-        }
 
         // Hàm đổi mật khẩu
         [HttpPost("change-password")]
@@ -160,5 +145,15 @@ namespace ATMManagementApplication.Controllers
         public string Name { get; set; }
         public string OldPassword { get; set; }
         public string NewPassword { get; set; }
+    }
+    public class LoginRequest
+    {
+        public string Name { get; set; }
+        public string Password { get; set; }
+    }
+    public class RegisterRequest
+    {
+        public string Name { get; set; }
+        public string Password { get; set; }
     }
 }
