@@ -3,8 +3,16 @@ using ATMManagementApplication.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder => builder.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
+});
 
-//add service to container => thiet lap cau hinh data model
+// Add service to container => thiết lập cấu hình data model
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ATMContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -12,12 +20,17 @@ builder.Services.AddDbContext<ATMContext>(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment()){
+if (app.Environment.IsDevelopment())
+{
     app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAllOrigins"); // Enable CORS
 app.UseAuthorization();
 app.MapControllers();
+
+// Set the application to listen on port 5175
+app.Urls.Add("http://localhost:5175");
 
 app.Run();
