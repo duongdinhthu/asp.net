@@ -13,7 +13,13 @@ namespace ATMManagementApplication.Models
         public decimal Balance { get; set; }
         public string Email { get; set; } // Thêm trường Email
 
-         public decimal DailyLimit { get; set; } = 5000;
-          public int TransactionCountLimit { get; set; } = 10; 
+        public decimal DailyLimit { get; set; } = 5000;
+        public int TransactionCountLimit { get; set; } = 10;
+        public string OTP { get; set; }
+
+        public DateTime? OTPExpiration { get; set; }
+        public decimal InterestRate { get; set; } = 0.02m; // Lãi suất hàng tháng (2%)
+
+        public DateTime LastInterestApplied { get; set; } = DateTime.Now; // Thời đi
     }
 }

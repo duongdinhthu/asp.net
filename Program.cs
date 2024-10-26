@@ -3,8 +3,12 @@ using ATMManagementApplication.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Hangfire; // Thêm namespace này
+using ATMManagementApplication.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Cấu hình xác thực JWT
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -25,7 +29,8 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
     };
 });
-// Add CORS policy
+
+// Cấu hình CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
@@ -34,11 +39,16 @@ builder.Services.AddCors(options =>
                           .AllowAnyHeader());
 });
 
-// Add service to container => thiết lập cấu hình data model
+// Thêm dịch vụ vào container
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ATMContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
         new MySqlServerVersion(new Version(8, 0, 33))));
+
+// Cấu hình Hangfire
+builder.Services.AddHangfire(configuration =>
+    configuration.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"))); // Thay đổi connection-string cho phù hợp
+builder.Services.AddHangfireServer();
 
 var app = builder.Build();
 
@@ -51,6 +61,13 @@ app.UseHttpsRedirection();
 app.UseCors("AllowAllOrigins"); // Enable CORS
 app.UseAuthorization();
 app.MapControllers();
+
+// Cấu hình bảng điều khiển Hangfire
+app.UseHangfireDashboard();
+app.UseHangfireServer();
+
+// Lên lịch hàng tháng cho hàm ApplyInterest
+RecurringJob.AddOrUpdate<ATMController>(x => x.ApplyInterest(), Cron.Monthly);
 
 // Set the application to listen on port 5175
 app.Urls.Add("http://localhost:5175");

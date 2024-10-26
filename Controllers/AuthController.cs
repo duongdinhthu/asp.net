@@ -137,7 +137,6 @@ namespace ATMManagementApplication.Controllers
 
             return Ok("Password changed successfully");
         }
-
     }
 
     public class ChangePasswordRequest
@@ -157,3 +156,5 @@ namespace ATMManagementApplication.Controllers
         public string Password { get; set; }
     }
 }
+
+
