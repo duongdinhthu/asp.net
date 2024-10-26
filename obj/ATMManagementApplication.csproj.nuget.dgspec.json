@@ -54,9 +54,9 @@
               "target": "Package",
               "version": "[1.8.15, )"
             },
-            "Hangfire.SqlServer": {
+            "Hangfire.MySql": {
               "target": "Package",
-              "version": "[1.8.15, )"
+              "version": "[0.0.7, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
@@ -76,6 +76,10 @@
               "target": "Package",
               "version": "[8.0.10, )"
             },
+            "MySql.Data": {
+              "target": "Package",
+              "version": "[8.0.33, )"
+            },
             "Pomelo.EntityFrameworkCore.MySql": {
               "target": "Package",
               "version": "[8.0.2, )"
@@ -83,6 +87,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"
+            },
+            "linq2db": {
+              "target": "Package",
+              "version": "[5.4.1, )"
             }
           },
           "imports": [

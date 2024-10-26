@@ -148,7 +148,6 @@ D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\Microsoft.AspNetCore.Authent
 D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\Hangfire.AspNetCore.dll
 D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\Hangfire.Core.dll
 D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\Hangfire.NetCore.dll
-D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\Hangfire.SqlServer.dll
 D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\Newtonsoft.Json.dll
 D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\ca\Hangfire.Core.resources.dll
 D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\de\Hangfire.Core.resources.dll
@@ -164,3 +163,19 @@ D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\sv\Hangfire.Core.resources.d
 D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\tr-TR\Hangfire.Core.resources.dll
 D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\zh-TW\Hangfire.Core.resources.dll
 D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\zh\Hangfire.Core.resources.dll
+D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\FluentAssertions.Core.dll
+D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\FluentAssertions.dll
+D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\Hangfire.MySql.dll
+D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\linq2db.dll
+D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\MySql.Data.dll
+D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\Owin.dll
+D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\Google.Protobuf.dll
+D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\K4os.Compression.LZ4.dll
+D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\K4os.Compression.LZ4.Streams.dll
+D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\K4os.Hash.xxHash.dll
+D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\BouncyCastle.Crypto.dll
+D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\runtimes\win-x64\native\comerr64.dll
+D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\runtimes\win-x64\native\gssapi64.dll
+D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\runtimes\win-x64\native\k5sprt64.dll
+D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\runtimes\win-x64\native\krb5_64.dll
+D:\CSharp\ATMManagementApplication\bin\Debug\net8.0\runtimes\win-x64\native\krbcc64.dll

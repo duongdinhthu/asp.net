@@ -1,190 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ATM Management</title>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-        padding: 20px;
-      }
-      h2 {
-        color: #333;
-      }
-      label {
-        display: block;
-        margin: 10px 0 5px;
-      }
-      input,
-      button {
-        padding: 10px;
-        margin-bottom: 10px;
-        width: 100%;
-        box-sizing: border-box;
-      }
-      button {
-        cursor: pointer;
-      }
-      .section {
-        margin-bottom: 30px;
-      }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f8f8f8;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input,
+        button {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .section {
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .toggle-section {
+            display: none;
+        }
+        .toggle-button {
+            margin: 10px 0;
+            background-color: #28a745;
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <h2>ATM Management Application</h2>
 
     <button onclick="logout()">Logout</button>
-    <!-- Nút đăng xuất -->
 
     <div class="section">
-      <h3>Check Balance</h3>
-      <label for="balanceCustomerId">Customer ID:</label>
-      <input type="number" id="balanceCustomerId" />
-      <button onclick="checkBalance()">Check Balance</button>
-      <p id="balanceResult"></p>
+        <button class="toggle-button" onclick="toggleSection('balanceSection')">Check Balance</button>
+        <div id="balanceSection" class="toggle-section">
+            <label for="balanceCustomerId">Customer ID:</label>
+            <input type="number" id="balanceCustomerId" />
+            <button onclick="checkBalance()">Check Balance</button>
+            <p id="balanceResult"></p>
+        </div>
     </div>
 
     <div class="section">
-      <h3>Withdraw Money</h3>
-      <label for="withdrawCustomerId">Customer ID:</label>
-      <input type="number" id="withdrawCustomerId" />
-      <label for="withdrawAmount">Amount:</label>
-      <input type="number" id="withdrawAmount" />
-      <button onclick="requestWithdrawOTP()">Request OTP for Withdraw</button>
-      <label for="withdrawOTP">Enter OTP:</label>
-      <input type="text" id="withdrawOTP" />
-      <button onclick="withdraw()">Withdraw</button>
-      <p id="withdrawResult"></p>
+        <button class="toggle-button" onclick="toggleSection('withdrawSection')">Withdraw Money</button>
+        <div id="withdrawSection" class="toggle-section">
+            <label for="withdrawCustomerId">Customer ID:</label>
+            <input type="number" id="withdrawCustomerId" />
+            <label for="withdrawAmount">Amount:</label>
+            <input type="number" id="withdrawAmount" />
+            <button onclick="requestWithdrawOTP()">Request OTP for Withdraw</button>
+            <label for="withdrawOTP">Enter OTP:</label>
+            <input type="text" id="withdrawOTP" />
+            <button onclick="withdraw()">Withdraw</button>
+            <p id="withdrawResult"></p>
+        </div>
     </div>
 
     <div class="section">
-      <h3>Deposit Money</h3>
-      <label for="depositCustomerId">Customer ID:</label>
-      <input type="number" id="depositCustomerId" />
-      <label for="depositAmount">Amount:</label>
-      <input type="number" id="depositAmount" />
-      <button onclick="deposit()">Deposit</button>
-      <p id="depositResult"></p>
+        <button class="toggle-button" onclick="toggleSection('depositSection')">Deposit Money</button>
+        <div id="depositSection" class="toggle-section">
+            <label for="depositCustomerId">Customer ID:</label>
+            <input type="number" id="depositCustomerId" />
+            <label for="depositAmount">Amount:</label>
+            <input type="number" id="depositAmount" />
+            <button onclick="deposit()">Deposit</button>
+            <p id="depositResult"></p>
+        </div>
     </div>
 
     <div class="section">
-      <h3>Transfer Money</h3>
-      <label for="transferSenderId">Sender ID:</label>
-      <input type="number" id="transferSenderId" />
-      <label for="transferReceiverId">Receiver ID:</label>
-      <input type="number" id="transferReceiverId" />
-      <label for="transferAmount">Amount:</label>
-      <input type="number" id="transferAmount" />
-      <button onclick="requestTransferOTP()">Request OTP for Transfer</button>
-      <label for="transferOTP">Enter OTP:</label>
-      <input type="text" id="transferOTP" />
-      <button onclick="transfer()">Transfer</button>
-      <p id="transferResult"></p>
+        <button class="toggle-button" onclick="toggleSection('transferSection')">Transfer Money</button>
+        <div id="transferSection" class="toggle-section">
+            <label for="transferSenderId">Sender ID:</label>
+            <input type="number" id="transferSenderId" />
+            <label for="transferReceiverId">Receiver ID:</label>
+            <input type="number" id="transferReceiverId" />
+            <label for="transferAmount">Amount:</label>
+            <input type="number" id="transferAmount" />
+            <button onclick="requestTransferOTP()">Request OTP for Transfer</button>
+            <label for="transferOTP">Enter OTP:</label>
+            <input type="text" id="transferOTP" />
+            <button onclick="transfer()">Transfer</button>
+            <p id="transferResult"></p>
+        </div>
     </div>
 
     <script>
-      const apiUrl = "http://localhost:5175/api/atm"; // Thay đổi URL này theo API thực tế của bạn
+        const apiUrl = "http://localhost:5175/api/atm";
 
-      async function checkBalance() {
-        const customerId = document.getElementById("balanceCustomerId").value;
-        const response = await fetch(`${apiUrl}/balance/${customerId}`);
-        const result = await response.json();
-        document.getElementById("balanceResult").textContent = response.ok
-          ? `Balance: ${result.balance}`
-          : result;
-      }
+        async function checkBalance() {
+            const customerId = document.getElementById("balanceCustomerId").value;
+            const response = await fetch(`${apiUrl}/balance/${customerId}`);
+            const result = await response.json();
+            document.getElementById("balanceResult").textContent = response.ok
+                ? `Balance: ${result.balance}`
+                : result;
+        }
 
-      async function requestWithdrawOTP() {
-        const customerId = document.getElementById("withdrawCustomerId").value;
-        console.log(customerId);
-        const response = await fetch(`${apiUrl}/request-otp/${customerId}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ customerId: parseInt(customerId) }),
-        });
-        document.getElementById("withdrawResult").textContent = response.ok
-          ? "OTP sent to your email."
-          : "Failed to send OTP.";
-      }
+        async function requestWithdrawOTP() {
+            const customerId = document.getElementById("withdrawCustomerId").value;
+            const response = await fetch(`${apiUrl}/request-otp/${customerId}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ customerId: parseInt(customerId) }),
+            });
+            document.getElementById("withdrawResult").textContent = response.ok
+                ? "OTP sent to your email."
+                : "Failed to send OTP.";
+        }
 
-      async function withdraw() {
-        const customerId = document.getElementById("withdrawCustomerId").value;
-        const amount = document.getElementById("withdrawAmount").value;
-        const otp = document.getElementById("withdrawOTP").value;
+        async function withdraw() {
+            const customerId = document.getElementById("withdrawCustomerId").value;
+            const amount = document.getElementById("withdrawAmount").value;
+            const otp = document.getElementById("withdrawOTP").value;
 
-        const response = await fetch(`${apiUrl}/withdraw`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            customerId: parseInt(customerId),
-            amount: parseFloat(amount),
-            otp: otp,
-          }),
-        });
-        const result = await response.json();
-        document.getElementById("withdrawResult").textContent = response.ok
-          ? `New Balance: ${result.newBalance}`
-          : result;
-      }
+            const response = await fetch(`${apiUrl}/withdraw`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    customerId: parseInt(customerId),
+                    amount: parseFloat(amount),
+                    otp: otp,
+                }),
+            });
+            const result = await response.json();
+            document.getElementById("withdrawResult").textContent = response.ok
+                ? `New Balance: ${result.newBalance}`
+                : result;
+        }
 
-      async function deposit() {
-        const customerId = document.getElementById("depositCustomerId").value;
-        const amount = document.getElementById("depositAmount").value;
+        async function deposit() {
+            const customerId = document.getElementById("depositCustomerId").value;
+            const amount = document.getElementById("depositAmount").value;
 
-        const response = await fetch(`${apiUrl}/plus`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            customerId: parseInt(customerId),
-            amount: parseFloat(amount),
-          }),
-        });
-        const result = await response.json();
-        document.getElementById("depositResult").textContent = response.ok
-          ? `New Balance: ${result.newBalance}`
-          : result;
-      }
+            const response = await fetch(`${apiUrl}/plus`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    customerId: parseInt(customerId),
+                    amount: parseFloat(amount),
+                }),
+            });
+            const result = await response.json();
+            document.getElementById("depositResult").textContent = response.ok
+                ? `New Balance: ${result.newBalance}`
+                : result;
+        }
 
-      async function requestTransferOTP() {
-        const senderId = document.getElementById("transferSenderId").value;
-        const response = await fetch(`${apiUrl}/request-otp/${senderId}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ customerId: parseInt(senderId) }),
-        });
-        document.getElementById("transferResult").textContent = response.ok
-          ? "OTP sent to your email."
-          : "Failed to send OTP.";
-      }
+        async function requestTransferOTP() {
+            const senderId = document.getElementById("transferSenderId").value;
+            const response = await fetch(`${apiUrl}/request-otp/${senderId}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ customerId: parseInt(senderId) }),
+            });
+            document.getElementById("transferResult").textContent = response.ok
+                ? "OTP sent to your email."
+                : "Failed to send OTP.";
+        }
 
-      async function transfer() {
-        const senderId = document.getElementById("transferSenderId").value;
-        const receiverId = document.getElementById("transferReceiverId").value;
-        const amount = document.getElementById("transferAmount").value;
-        const otp = document.getElementById("transferOTP").value;
+        async function transfer() {
+            const senderId = document.getElementById("transferSenderId").value;
+            const receiverId = document.getElementById("transferReceiverId").value;
+            const amount = document.getElementById("transferAmount").value;
+            const otp = document.getElementById("transferOTP").value;
 
-        const response = await fetch(`${apiUrl}/transfer`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            senderId: parseInt(senderId),
-            receiverId: parseInt(receiverId),
-            amount: parseFloat(amount),
-            otp: otp,
-          }),
-        });
-        const result = await response.json();
-        document.getElementById("transferResult").textContent = response.ok
-          ? `Transfer Successful. Sender New Balance: ${result.senderNewBalance}, Receiver New Balance: ${result.receiverNewBalance}`
-          : result;
-      }
+            const response = await fetch(`${apiUrl}/transfer`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    senderId: parseInt(senderId),
+                    receiverId: parseInt(receiverId),
+                    amount: parseFloat(amount),
+                    otp: otp,
+                }),
+            });
+            const result = await response.json();
+            document.getElementById("transferResult").textContent = response.ok
+                ? `Transfer Successful. Sender New Balance: ${result.senderNewBalance}, Receiver New Balance: ${result.receiverNewBalance}`
+                : result;
+        }
 
-      function logout() {
-        localStorage.removeItem("jwt");
-        window.location.href = "login.html";
-      }
+        function logout() {
+            localStorage.removeItem("jwt");
+            window.location.href = "login.html";
+        }
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.style.display = section.style.display === 'block' ? 'none' : 'block';
+        }
     </script>
-  </body>
+</body>
 </html>
