@@ -13,9 +13,13 @@ namespace ATMManagementApplication.Controllers
     public class ATMController : ControllerBase
     {
         private readonly ATMContext _context;
-        public ATMController(ATMContext context)
+        private readonly InterestService _interestService; // Thêm InterestService
+
+        public ATMController(ATMContext context, InterestService interestService)
         {
             _context = context;
+            _interestService = interestService; // Khởi tạo InterestService
+
         }
         [HttpGet("balance/{customerId}")]
         public ActionResult GetBalance(int customerId)
@@ -267,23 +271,10 @@ namespace ATMManagementApplication.Controllers
         [HttpPost("apply-interest")]
         public IActionResult ApplyInterest()
         {
-            var customers = _context.Customer.ToList();
-            int updatedCount = 0; // Đếm số tài khoản được cập nhật
+            // Gọi hàm ApplyInterest trong service
+            int updatedCount = _interestService.ApplyInterest(); // Gọi hàm ApplyInterest từ InterestService
 
-            foreach (var customer in customers)
-            {
-                // Kiểm tra xem đã cộng lãi suất chưa
-                if (customer.LastInterestApplied.AddMonths(1) <= DateTime.Now)
-                {
-                    decimal interest = customer.Balance * customer.InterestRate; // Tính lãi suất
-                    customer.Balance += interest; // Cộng lãi suất vào tài khoản
-                    customer.LastInterestApplied = DateTime.Now; // Cập nhật thời gian cộng lãi suất
-                    updatedCount++;
-                }
-            }
-
-            _context.SaveChanges();
-
+            // Kiểm tra kết quả cập nhật
             if (updatedCount > 0)
             {
                 return Ok($"{updatedCount} accounts interest applied successfully.");
@@ -293,6 +284,8 @@ namespace ATMManagementApplication.Controllers
                 return Ok("No accounts were eligible for interest application.");
             }
         }
+
+
 
 
 

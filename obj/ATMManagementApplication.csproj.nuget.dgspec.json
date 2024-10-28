@@ -50,14 +50,6 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "Hangfire.AspNetCore": {
-              "target": "Package",
-              "version": "[1.8.15, )"
-            },
-            "Hangfire.MySql": {
-              "target": "Package",
-              "version": "[0.0.7, )"
-            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[8.0.10, )"
